@@ -1,38 +1,34 @@
-#include "./monitor.h"
-#include <assert.h>
+#include "monitor.h"
+#include <iostream>
 #include <thread>
 #include <chrono>
-#include <iostream>
-using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
+// Reusable blinking function
+void blinkWarning() {
+    for (int i = 0; i < 6; ++i) {
+        std::cout << "\r* " << std::flush;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << "\r *" << std::flush;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+// Main vitals check
 int vitalsOk(float temperature, float pulseRate, float spo2) {
-  if (temperature > 102 || temperature < 95) {
-    cout << "Temperature is critical!\n";
-    for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+    if (temperature > 102.0f || temperature < 95.0f) {
+        std::cout << "Temperature is critical!\n";
+        blinkWarning();
+        return 0;
     }
-    return 0;
-  } else if (pulseRate < 60 || pulseRate > 100) {
-    cout << "Pulse Rate is out of range!\n";
-    for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+    if (pulseRate < 60.0f || pulseRate > 100.0f) {
+        std::cout << "Pulse Rate is out of range!\n";
+        blinkWarning();
+        return 0;
     }
-    return 0;
-  } else if (spo2 < 90) {
-    cout << "Oxygen Saturation out of range!\n";
-    for (int i = 0; i < 6; i++) {
-      cout << "\r* " << flush;
-      sleep_for(seconds(1));
-      cout << "\r *" << flush;
-      sleep_for(seconds(1));
+    if (spo2 < 90.0f) {
+        std::cout << "Oxygen Saturation out of range!\n";
+        blinkWarning();
+        return 0;
     }
-    return 0;
-  }
-  return 1;
+    return 1;
 }
