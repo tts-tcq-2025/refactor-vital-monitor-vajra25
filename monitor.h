@@ -1,9 +1,7 @@
 #pragma once
 
-// Pure function: just checks vital signs, no printing or delays
+// Check if vitals are in range (pure function)
 bool vitalsOk(float temperature, float pulseRate, float spo2);
 
-// Optional I/O function: prints warning with blinking animation
+// Print warning message with blinking animation (I/O function)
 void printVitalWarning(const char* message, int flashes = 6);
-
-
